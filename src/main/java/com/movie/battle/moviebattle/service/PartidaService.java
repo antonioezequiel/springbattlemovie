@@ -1,18 +1,13 @@
 package com.movie.battle.moviebattle.service;
 
-import java.util.ArrayList;
 import java.util.Optional;
-
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.movie.battle.moviebattle.DTO.PartidaDTO;
-import com.movie.battle.moviebattle.classes.Movie;
 import com.movie.battle.moviebattle.classes.Partida;
 import com.movie.battle.moviebattle.repository.PartidaRepository;
 import com.movie.battle.moviebattle.security.AutenticationTokenFilter;
-
 
 @Service
 public class PartidaService {
@@ -63,8 +58,10 @@ public class PartidaService {
 	/*
 	 * Atualiza a lista de filmes sorteados para vazia
 	 */
-	public void removerDadosMovieJogadaDa(Partida partida) {
-		partida.setMovies(new ArrayList<Movie>());
+	public void removerDadosMidiaJogadaDa(Partida partida) {
+		partida.removeMidiasJogada();
+		
+		/*Atualiza partida sem midias, permitindo a escolha de novas mídias*/
 		partidaRepository.save(partida);		
 	}
 	

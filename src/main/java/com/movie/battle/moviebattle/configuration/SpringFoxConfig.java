@@ -22,6 +22,7 @@ public class SpringFoxConfig {
 				.paths(PathSelectors.any()).build().apiInfo(apiInfo());
 	}
 
+	@SuppressWarnings("unchecked")
 	private ApiInfo apiInfo() {
 		/*
 		 * ApiInfo apiInfo = new ApiInfo("MovieBattle",

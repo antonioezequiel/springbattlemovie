@@ -22,7 +22,7 @@ public class Partida {
     private Integer life;
     private int round;
     @ManyToAny(fetch = FetchType.LAZY, metaColumn = @Column)
-    private List<Media> medias;
+    private List<Midia> midias;
     @Transient
     private String message;
     
@@ -33,7 +33,7 @@ public class Partida {
 		this.score = score;
 		this.life = life;
 		this.round = round;
-		this.medias = new ArrayList<Media>();
+		this.midias = new ArrayList<Midia>();
 	}
 	public Partida() {}
 	
@@ -61,14 +61,14 @@ public class Partida {
 	/**
 	 * @return the movies
 	 */
-	public List<Media> getMedias() {
-		return medias;
+	public List<Midia> getMidias() {
+		return midias;
 	}
 	/**
 	 * @param movies the movies to set
 	 */
-	public void setMedias(List<Media> medias) {
-		this.medias = medias;
+	public void setMidias(Midia midia) {
+		this.midias.add(midia);
 	}
 	/**
 	 * @return the usuario
@@ -120,13 +120,13 @@ public class Partida {
 	}
 	
 	public boolean isJogadaAtiva() {
-		return !this.medias.isEmpty();
+		return !this.midias.isEmpty();
 	}
 	
 	public Partida verifyAnswer(JogadaDTO jogadaDTO) {
 		
-		List<Media> mediasOrder = this.medias.stream().sorted(
-									Comparator.comparing(Media::getScore).reversed())
+		List<Midia> mediasOrder = this.midias.stream().sorted(
+									Comparator.comparing(Midia::getScore).reversed())
 									.collect(Collectors.toList());
 		
 		if (mediasOrder.get(0).getImdbId().equals(jogadaDTO.getImdbID())) {
@@ -134,7 +134,7 @@ public class Partida {
 			this.message = "Parabéns, você acertou";
 		} else {
 			this.setLife(this.getLife() - 1);
-			this.message = "Infelizmente você acertou";
+			this.message = "Infelizmente você não acertou";
 		}
 		this.setRound(this.getRound() + 1);
 		return this;		
@@ -142,5 +142,9 @@ public class Partida {
 	
 	public boolean existeVidas() {
 		return this.getLife() > 0 ? true : false;
+	}
+	
+	public void removeMidiasJogada() {
+		this.midias = new ArrayList<Midia>();		
 	}       
  }

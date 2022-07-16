@@ -11,24 +11,24 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.movie.battle.moviebattle.DTO.JogadaDTO;
-import com.movie.battle.moviebattle.DTO.MovieDTO;
+import com.movie.battle.moviebattle.DTO.MidiaDTO;
 import com.movie.battle.moviebattle.DTO.PartidaDTO;
 import com.movie.battle.moviebattle.classes.Jogo;
 import com.movie.battle.moviebattle.classes.Partida;
 import com.movie.battle.moviebattle.service.JogosService;
-import com.movie.battle.moviebattle.service.MovieService;
+import com.movie.battle.moviebattle.service.MidiaService;
 import com.movie.battle.moviebattle.service.PartidaService;
 
 @RestController
 @RequestMapping("/api/movieshow")
 public class PlayController {
-	private final MovieService movieService;
+	private final MidiaService midiaService;
 	private final PartidaService partidaService;
 	private final JogosService jogosService;
 
 	@Autowired
-	public PlayController(MovieService movieService, PartidaService partidaService, JogosService jogosService) {
-		this.movieService = movieService;
+	public PlayController(MidiaService midiaService, PartidaService partidaService, JogosService jogosService) {
+		this.midiaService = midiaService;
 		this.partidaService = partidaService;
 		this.jogosService = jogosService;
 	}
@@ -45,9 +45,9 @@ public class PlayController {
 		try {
 			partida = partidaService.recuperarDadosPartidaUsuario(request);
 			if (!partida.isJogadaAtiva()) {
-				return ResponseEntity.ok(movieService.sortearFilmes(partida));				
+				return ResponseEntity.ok(midiaService.sortearMidias(partida));				
 			} else {
-				return ResponseEntity.ok(MovieDTO.transformaEmListaMoviesDTO(partida.getMovies()));
+				return ResponseEntity.ok(MidiaDTO.transformaEmListaMidiasDTO(partida.getMidias()));
 			}
 		} catch (Exception e1) {
 			e1.printStackTrace();
@@ -64,14 +64,14 @@ public class PlayController {
 			if (partida.isJogadaAtiva()) {
 				partida = partida.verifyAnswer(jogadaDTO);
 				partidaDTO = PartidaDTO.transformaEmDTO(partida);
-				partidaService.removerDadosMovieJogadaDa(partida);
+				partidaService.removerDadosMidiaJogadaDa(partida);
 				if (!partida.existeVidas()) {
 					finalizarJogo(partida);
 					partidaDTO.setMessage("O jogo acabou. Você não tem mais vidas. Dados da partida salvos com sucesso");
 				}
 			} else {
 				partidaDTO = PartidaDTO.transformaEmDTO(partida);
-				partidaDTO.setMessage("É necessário realizar o sorteio dos filmes");
+				partidaDTO.setMessage("É necessário realizar o sorteio dos Midias");
 			}
 			return ResponseEntity.ok(partidaDTO);
 		} catch (Exception e) {

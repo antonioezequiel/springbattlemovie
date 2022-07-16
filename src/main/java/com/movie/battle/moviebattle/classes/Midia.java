@@ -2,7 +2,7 @@ package com.movie.battle.moviebattle.classes;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
-
+import javax.persistence.ManyToOne;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -16,28 +16,30 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
     "imdbVotes",
     "imdbID"
 })
-public abstract class Media {
+public class Midia {
 	@Id
 	@JsonProperty("imdbID")
-	protected String imdbId;
+	private String imdbId;
 	
 	@JsonProperty("Title")
-	protected String title;
+	private String title;
 
 	@JsonProperty("Year")
-	protected String year;
+	private String year;
 	 
 	@JsonProperty("imdbRating")
-	protected Double rating;
+	private Double rating;
 	 
 	@JsonProperty("imdbVotes")
-	protected String votes;
+	private String votes;
 	 
-	protected double score;
+	private double score;
     
-	protected String foto;
-
-	public Media(String imdbId, String title, String year, Double rating, String votes) {
+	private String foto;
+	@ManyToOne
+	private Categoria categoria;
+	
+	public Midia(String imdbId, String title, String year, Double rating, String votes) {
 		super();	
 		this.imdbId = imdbId;
 		this.title = title;
@@ -47,9 +49,9 @@ public abstract class Media {
 		this.score = rating * Double.parseDouble(votes);
 	}
 	
-	public Media() {}
+	public Midia() {}
 
-	public Media(String imdbId, String title, String year) {
+	public Midia(String imdbId, String title, String year) {
 		this.imdbId = imdbId;
 		this.title = title;
 		this.year = year;
@@ -66,6 +68,14 @@ public abstract class Media {
 		return foto;
 	}
 	
+	public Categoria getCategoria() {
+		return categoria;
+	}
+
+	public void setCategoria(Categoria categoria) {
+		this.categoria = categoria;
+	}
+
 	public void setFoto(String foto) {
 		this.foto = foto;
 	}
@@ -149,7 +159,10 @@ public abstract class Media {
 
 	@Override
 	public String toString() {
-		return "Movie [imdbId=" + imdbId + ", title=" + title + ", year=" + year + ", rating=" + rating + ", votes="
-				+ votes + ", score=" + score + ", foto=" + foto + "]";
+		return "Media [imdbId=" + imdbId + ", title=" + title + ", year=" + year + ", rating=" + rating + ", votes="
+				+ votes + ", score=" + score + ", foto=" + foto + ", categoria=" + categoria + ", getClass()="
+				+ getClass() + ", hashCode()=" + hashCode() + ", toString()=" + super.toString() + "]";
 	}
+	
+	
 }

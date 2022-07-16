@@ -9,24 +9,24 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.movie.battle.moviebattle.DTO.UsuarioDTO;
 import com.movie.battle.moviebattle.classes.Usuario;
-import com.movie.battle.moviebattle.service.MovieService;
+import com.movie.battle.moviebattle.service.MidiaService;
 import com.movie.battle.moviebattle.service.UsuarioService;
 
 @RestController
 public class CargaController {
-	private final MovieService movieService;
+	private final MidiaService midiaService;
 	private final UsuarioService usuarioService;
 	
 	@Autowired
-	public CargaController(MovieService movieService, UsuarioService usuarioService) {
+	public CargaController(MidiaService midiaService, UsuarioService usuarioService) {
 		super();
-		this.movieService = movieService;
+		this.midiaService = midiaService;
 		this.usuarioService = usuarioService;
 	}
 
 	@GetMapping("/carregar")
 	public String carregarDados() {
-		movieService.carregarFilmesIMDB();
+		midiaService.carregarMidiasIMDB();
 		return "dados carregados com sucesso";
 	}
 	

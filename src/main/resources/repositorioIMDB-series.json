@@ -1,0 +1,7 @@
+{"paginas" : [
+	{"pagina":"https://www.imdb.com/search/title/?title_type=tv_series&num_votes=100000,&sort=user_rating,desc"},
+	{"pagina":"https://www.imdb.com/search/title/?title_type=tv_series&num_votes=100000,&sort=user_rating,desc&start=51&ref_=adv_nxt"},
+	{"pagina":"https://www.imdb.com/search/title/?title_type=tv_series&num_votes=100000,&sort=user_rating,desc&start=101&ref_=adv_nxt"},
+	{"pagina":"https://www.imdb.com/search/title/?title_type=tv_series&num_votes=100000,&sort=user_rating,desc&start=151&ref_=adv_nxt"},
+	{"pagina":"https://www.imdb.com/search/title/?title_type=tv_series&num_votes=100000,&sort=user_rating,desc&start=201&ref_=adv_nxt"}	
+]}
