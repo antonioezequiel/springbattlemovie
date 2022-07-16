@@ -30,7 +30,7 @@ public class SpringFoxConfig {
 		 * "Terms of service", "antonio.ezequiel@ufpe.br", "License of API",
 		 * "https://swagger.io/docs/");
 		 */
-		return new ApiInfo("MovieBattle", "<b>Aplicação do desafio da let´s code - Movies Battle.</b>"
+		return new ApiInfo("MovieBattle", "<b>Aplicação Midia Battle.</b>"
 				+ "<br/> A primeira ação que deve ser realizada para utilizar o sistema é executar o endpoint<b> /carregar uma única vez</b>. Esse endpoint carrega a banco com os usuários padrão"
 				+ " <b>(login: antonio, senha: 123456 - login: jose, senha: 123456)</b>. <br/> Após essa ação, é necessário realizar o <b> login (/auth) </b> no sistema para a geração do token. "
 				+ "O token deve ser passado para os <b>endpoint restritos(/iniciar,  /sortear, /jogar, /finalizar)</b>. <br/> O jogo inicia com o endpoint <b>/iniciar</b>, e continua com os demais endpoits. "
