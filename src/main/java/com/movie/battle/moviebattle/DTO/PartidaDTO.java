@@ -1,7 +1,5 @@
 package com.movie.battle.moviebattle.DTO;
 
-import com.movie.battle.moviebattle.classes.Partida;
-
 public class PartidaDTO {
 	private String usuario;
     private int score;
@@ -27,13 +25,6 @@ public class PartidaDTO {
 	
 	public PartidaDTO() {}
 	
-	public Partida transformaParaObjeto() {
-		return new Partida(this.usuario, this.score, this.life, this.round);
-	}
-	
-	public static PartidaDTO transformaEmDTO(Partida partida) {
-		return new PartidaDTO(partida.getUsuario(), partida.getScore(), partida.getLife(), partida.getRound(), partida.getMessage());
-	}
 	
 	/**
 	 * @return the usuario

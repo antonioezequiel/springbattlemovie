@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -11,7 +12,6 @@ import javax.persistence.Id;
 import javax.persistence.Transient;
 
 import org.hibernate.annotations.ManyToAny;
-import com.movie.battle.moviebattle.DTO.JogadaDTO;
 
 @Entity
 public class Partida {
@@ -123,13 +123,13 @@ public class Partida {
 		return !this.midias.isEmpty();
 	}
 	
-	public Partida verifyAnswer(JogadaDTO jogadaDTO) {
+	public Partida verifyAnswer(String codigoIMDB) {
 		
 		List<Midia> mediasOrder = this.midias.stream().sorted(
 									Comparator.comparing(Midia::getScore).reversed())
 									.collect(Collectors.toList());
 		
-		if (mediasOrder.get(0).getImdbId().equals(jogadaDTO.getImdbID())) {
+		if (mediasOrder.get(0).getImdbId().equals(codigoIMDB)) {
 			this.setScore(this.getScore() + 1);
 			this.message = "Parabéns, você acertou";
 		} else {

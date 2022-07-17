@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -12,6 +13,8 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.modelmapper.ModelMapper;
+import org.modelmapper.PropertyMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
@@ -26,18 +29,30 @@ import com.movie.battle.moviebattle.repository.MidiaRepository;
 @Service
 public class MidiaService {
 
-	MidiaRepository midiaRepository;
-	PartidaService partidaService;
-	CategoriaService categoriaService;
-
-	public MidiaService() throws IOException {}
+	private final MidiaRepository midiaRepository;
+	private final PartidaService partidaService;
+	private final CategoriaService categoriaService;
+	private final ModelMapper modelMapper;
 
 	@Autowired
-	public MidiaService(CategoriaService categoriaService, MidiaRepository midiaRepository, @Lazy PartidaService partidaService) throws IOException {
+	public MidiaService(CategoriaService categoriaService, ModelMapper modelMapper,
+			MidiaRepository midiaRepository, @Lazy PartidaService partidaService) throws IOException {
 		super();
 		this.midiaRepository = midiaRepository;
 		this.partidaService = partidaService;
 		this.categoriaService = categoriaService;
+		this.modelMapper = modelMapper;
+		
+		/*
+		 * Mapeamento para definir apenas a descrição da categoria, como categoria no DTO
+		 */
+		PropertyMap<Midia, MidiaDTO> midiaMap = new PropertyMap<Midia, MidiaDTO>() {
+			  protected void configure() {
+			    map().setCategoria(source.getCategoria().getDescricao());
+			  }
+		};
+
+		modelMapper.addMappings(midiaMap);
 	}
 
 	public void carregarMidiasIMDB() {
@@ -124,29 +139,34 @@ public class MidiaService {
 	}
 
 	public List<MidiaDTO> sortearMidias(Partida partida) {
-		Categoria categoria = definirCategoriaAleatoria();
-		List<Midia> midias = midiaRepository.findByCategoria(categoria);
-		List<MidiaDTO> midiasDTO = new ArrayList<MidiaDTO>();
-		
-		/* Embaralha a lista de midias*/
-		Collections.shuffle(midias);
-		
-		partida.setMidias(midias.get(0));
-		partida.setMidias(midias.get(2));
-		
-		MidiaDTO moviDTO = MidiaDTO.transformaEmDTO(midias.get(0));
-		midiasDTO.add(moviDTO);
-		moviDTO = MidiaDTO.transformaEmDTO(midias.get(2));
-		midiasDTO.add(moviDTO);
-		
-		/* atualiza a jogada no banco de dados*/
-		atualizarFilmesSorteadosPartida(partida);
-
-		return midiasDTO;
+		//Se não existir filmes sorteados, o sistema sorteia novos filmes
+		if (!partida.isJogadaAtiva()) {
+			Categoria categoria = definirCategoriaAleatoria();
+			List<Midia> midias = midiaRepository.findByCategoria(categoria);
+			
+			/* Embaralha a lista de midias*/
+			Collections.shuffle(midias);
+			
+			partida.setMidias(midias.get(0));
+			partida.setMidias(midias.get(2));
+					
+			/* atualiza a jogada no banco de dados*/
+			atualizarFilmesSorteadosPartida(partida);
+		}
+		return transformaListaEmDTO(partida.getMidias());
 	}
 
 	private Categoria definirCategoriaAleatoria() {
 		return categoriaService.buscarCategoriaAleatoria();
+	}
+	
+	public MidiaDTO transformaEmDTO(Midia midia) {
+		return modelMapper.map(midia, MidiaDTO.class);
+	}
+	
+	public List<MidiaDTO> transformaListaEmDTO(List<Midia> midias) {
+		return midias.stream().map(midia -> modelMapper.map(midia, MidiaDTO.class))
+				.collect(Collectors.toList());
 	}
 
 	private void atualizarFilmesSorteadosPartida(Partida partida) {

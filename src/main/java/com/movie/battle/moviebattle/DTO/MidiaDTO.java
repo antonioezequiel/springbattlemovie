@@ -1,9 +1,5 @@
 package com.movie.battle.moviebattle.DTO;
 
-import java.util.List;
-import java.util.stream.Collectors;
-import com.movie.battle.moviebattle.classes.Midia;
-
 public class MidiaDTO {
 	private String title;
 	private String year;
@@ -19,10 +15,8 @@ public class MidiaDTO {
 		this.categoria = categoria;
 		this.foto = foto;
 	}
-
-	public static MidiaDTO transformaEmDTO(Midia media) {
-		return new MidiaDTO(media.getTitle(), media.getYear(), media.getImdbId(), media.getCategoria().getDescricao(), media.getFoto());
-	}
+	
+	public MidiaDTO() {}
 
 	public String getCategoria() {
 		return categoria;
@@ -39,6 +33,7 @@ public class MidiaDTO {
 	public void setFoto(String foto) {
 		this.foto = foto;
 	}
+	
 
 	/**
 	 * @return the title
@@ -81,19 +76,4 @@ public class MidiaDTO {
 	public void setImdbId(String imdbId) {
 		this.imdbId = imdbId;
 	}
-
-	public static List<Midia> transformaEmListaMidias(List<MidiaDTO> mediasDTO) {
-		return mediasDTO.stream()
-				.map(mediaDTO -> 
-					new Midia(mediaDTO.getImdbId(), mediaDTO.getTitle(), mediaDTO.getYear()))
-						.collect(Collectors.toList());
-	}
-	
-	public static List<MidiaDTO> transformaEmListaMidiasDTO(List<Midia> medias) {
-		return medias.stream()
-				.map(media -> 
-					new MidiaDTO(media.getTitle(), media.getYear(), media.getImdbId(), media.getCategoria().getDescricao(), media.getFoto()))
-						.collect(Collectors.toList());
-	}
-
 }

@@ -11,9 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.movie.battle.moviebattle.DTO.JogadaDTO;
-import com.movie.battle.moviebattle.DTO.MidiaDTO;
 import com.movie.battle.moviebattle.DTO.PartidaDTO;
-import com.movie.battle.moviebattle.classes.Jogo;
 import com.movie.battle.moviebattle.classes.Partida;
 import com.movie.battle.moviebattle.service.JogosService;
 import com.movie.battle.moviebattle.service.MidiaService;
@@ -41,14 +39,9 @@ public class PlayController {
 
 	@GetMapping("/sortear")
 	public ResponseEntity<?> sortear(HttpServletRequest request) {
-		Partida partida;
 		try {
-			partida = partidaService.recuperarDadosPartidaUsuario(request);
-			if (!partida.isJogadaAtiva()) {
-				return ResponseEntity.ok(midiaService.sortearMidias(partida));				
-			} else {
-				return ResponseEntity.ok(MidiaDTO.transformaEmListaMidiasDTO(partida.getMidias()));
-			}
+			Partida partida = partidaService.recuperarDadosPartidaUsuario(request);
+			return ResponseEntity.ok(midiaService.sortearMidias(partida));
 		} catch (Exception e1) {
 			e1.printStackTrace();
 			return ResponseEntity.notFound().build();
@@ -57,22 +50,9 @@ public class PlayController {
 
 	@PostMapping("/jogar")
 	public ResponseEntity<?> jogar(@RequestBody JogadaDTO jogadaDTO, HttpServletRequest request) {
-		Partida partida;
-		PartidaDTO partidaDTO;
 		try {
-			partida = partidaService.recuperarDadosPartidaUsuario(request);
-			if (partida.isJogadaAtiva()) {
-				partida = partida.verifyAnswer(jogadaDTO);
-				partidaDTO = PartidaDTO.transformaEmDTO(partida);
-				partidaService.removerDadosMidiaJogadaDa(partida);
-				if (!partida.existeVidas()) {
-					finalizarJogo(partida);
-					partidaDTO.setMessage("O jogo acabou. Você não tem mais vidas. Dados da partida salvos com sucesso");
-				}
-			} else {
-				partidaDTO = PartidaDTO.transformaEmDTO(partida);
-				partidaDTO.setMessage("É necessário realizar o sorteio dos Midias");
-			}
+			Partida partida = partidaService.recuperarDadosPartidaUsuario(request);
+			PartidaDTO partidaDTO = partidaService.analisarResposta(partida, jogadaDTO);
 			return ResponseEntity.ok(partidaDTO);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -82,14 +62,12 @@ public class PlayController {
 
 	@GetMapping("/finalizar")
 	public ResponseEntity<PartidaDTO> finalizar(HttpServletRequest request) {
-		Partida partida;
 		try {
-			partida = partidaService.recuperarDadosPartidaUsuario(request);
-			finalizarJogo(partida);
-			PartidaDTO partidaDTO = PartidaDTO.transformaEmDTO(partida);
-			partidaDTO.setMessage("O jogo acabou. Dados da partida salvos com sucesso");
+			Partida partida = partidaService.recuperarDadosPartidaUsuario(request);
+			PartidaDTO partidaDTO = partidaService.finalizarPartida(partida,
+					"O jogo acabou. Dados da partida salvos com sucesso");
 			return ResponseEntity.ok(partidaDTO);
-		}catch (Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			return ResponseEntity.notFound().build();
 		}
@@ -103,10 +81,5 @@ public class PlayController {
 		} catch (Exception e) {
 			return ResponseEntity.notFound().build();
 		}
-	}
-
-	private Jogo finalizarJogo(Partida partida) {
-		partidaService.removerDadosDa(partida);
-		return jogosService.savePart(partida);
 	}
 }
