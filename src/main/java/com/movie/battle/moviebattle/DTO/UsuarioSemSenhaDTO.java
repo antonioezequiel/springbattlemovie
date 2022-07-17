@@ -1,18 +1,11 @@
 package com.movie.battle.moviebattle.DTO;
 
-public class UsuarioDTO {
+public class UsuarioSemSenhaDTO {
 	private String nome;
-	private String senha;
 	
-	public UsuarioDTO() {}
+	public UsuarioSemSenhaDTO() {}
 
-	public UsuarioDTO(String nome, String senha) {
-		super();
-		this.nome = nome;
-		this.senha = senha;
-	}
-	
-	public UsuarioDTO(String nome) {
+	public UsuarioSemSenhaDTO(String nome) {
 		super();
 		this.nome = nome;
 	}
@@ -31,19 +24,6 @@ public class UsuarioDTO {
 		this.nome = nome;
 	}
 
-	/**
-	 * @return the senha
-	 */
-	public String getSenha() {
-		return senha;
-	}
-
-	/**
-	 * @param senha the senha to set
-	 */
-	public void setSenha(String senha) {
-		this.senha = senha;
-	}
 
 //	public Usuario transformaParaUsuario() {
 //		return new Usuario(this.nome, this.senha);

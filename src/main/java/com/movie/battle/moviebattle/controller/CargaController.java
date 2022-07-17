@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.movie.battle.moviebattle.DTO.UsuarioDTO;
-import com.movie.battle.moviebattle.classes.Usuario;
+import com.movie.battle.moviebattle.DTO.UsuarioSemSenhaDTO;
 import com.movie.battle.moviebattle.service.MidiaService;
 import com.movie.battle.moviebattle.service.UsuarioService;
 
@@ -16,7 +16,7 @@ import com.movie.battle.moviebattle.service.UsuarioService;
 public class CargaController {
 	private final MidiaService midiaService;
 	private final UsuarioService usuarioService;
-	
+
 	@Autowired
 	public CargaController(MidiaService midiaService, UsuarioService usuarioService) {
 		super();
@@ -29,28 +29,27 @@ public class CargaController {
 		midiaService.carregarMidiasIMDB();
 		return "dados carregados com sucesso";
 	}
-	
+
 	@PostMapping("/create/new-user")
-	public ResponseEntity<?> cadastrar(@RequestBody UsuarioDTO usuarioDTO){
+	public ResponseEntity<?> cadastrar(@RequestBody UsuarioDTO usuarioDTO) {
 		try {
-			Usuario usuario = usuarioService.criarUsuario(usuarioDTO.transformaParaUsuario());
-			return ResponseEntity.ok(UsuarioDTO.transformaDTO(usuario));
-		}catch (Exception e) {
-			System.out.println(e.getMessage());
+			UsuarioSemSenhaDTO usuarioSemSenhaDTO = usuarioService
+					.criarUsuario(usuarioService.transformaParaUsuario(usuarioDTO));
+			return ResponseEntity.ok(usuarioSemSenhaDTO);
+		} catch (Exception e) {
 			return ResponseEntity.noContent().build();
 		}
 	}
-	
+
 	@GetMapping("/create/new-user-padrao")
-	public ResponseEntity<?> cadastrar(){
+	public ResponseEntity<?> cadastrar() {
 		try {
 			usuarioService.criarUsuario();
 			return ResponseEntity.ok("usuários padrão criados");
-		}catch (Exception e) {
+		} catch (Exception e) {
 			System.out.println(e.getMessage());
 			return ResponseEntity.noContent().build();
 		}
 	}
-	
-	
+
 }

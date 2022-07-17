@@ -3,11 +3,16 @@ package com.movie.battle.moviebattle.service;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import com.movie.battle.moviebattle.DTO.UsuarioDTO;
+import com.movie.battle.moviebattle.DTO.UsuarioSemSenhaDTO;
 import com.movie.battle.moviebattle.classes.Role;
 import com.movie.battle.moviebattle.classes.Usuario;
 import com.movie.battle.moviebattle.repository.RoleRepository;
@@ -16,14 +21,16 @@ import com.movie.battle.moviebattle.repository.UsuarioRepository;
 @Service
 public class UsuarioService implements UserDetailsService {
 
-	UsuarioRepository usuarioRepository;
-	RoleRepository roleRepository;
+	private final UsuarioRepository usuarioRepository;
+	private final RoleRepository roleRepository;
+	private final ModelMapper modelMapper;
 
 	@Autowired
-	public UsuarioService(UsuarioRepository usuarioRepository, RoleRepository roleRepository) {
+	public UsuarioService(ModelMapper modelMapper, UsuarioRepository usuarioRepository, RoleRepository roleRepository) {
 		super();
 		this.usuarioRepository = usuarioRepository;
 		this.roleRepository = roleRepository;
+		this.modelMapper = modelMapper;
 	}
 
 	public void create(Usuario usuario) {
@@ -63,7 +70,7 @@ public class UsuarioService implements UserDetailsService {
 		usuarioRepository.save(usuario);
 	}
 
-	public Usuario criarUsuario(Usuario usuario) {
+	public UsuarioSemSenhaDTO criarUsuario(Usuario usuario) {
 		Role role = roleRepository.getByNome("ADM");
 		if (role == null) {
 			role = new Role("ADM");
@@ -73,10 +80,18 @@ public class UsuarioService implements UserDetailsService {
 		usuario.setRoles(Arrays.asList(role));
 		try {
 			usuarioRepository.save(usuario);
-			return usuario;
+			return transformaEmDTO(usuario);
 		} catch (Exception e) {
 			throw new RuntimeException();
 		}
+	}
+
+	public UsuarioSemSenhaDTO transformaEmDTO(Usuario usuario) {
+		return modelMapper.map(usuario, UsuarioSemSenhaDTO.class);
+	}
+
+	public Usuario transformaParaUsuario(UsuarioDTO usuarioDTO) {
+		return modelMapper.map(usuarioDTO, Usuario.class);
 	}
 
 }
