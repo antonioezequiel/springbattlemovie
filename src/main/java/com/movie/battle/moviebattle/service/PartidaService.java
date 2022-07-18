@@ -89,7 +89,7 @@ public class PartidaService {
 		PartidaDTO partidaDTO;
 		//Se a jogada estiver ativa, ou seja, se teve mídias sorteadas
 		if (partida.isJogadaAtiva()) {
-			partida = partida.verifyAnswer(jogadaDTO.getImdbID());
+			partida = partida.verificarResposta(jogadaDTO.getImdbID());
 			partidaDTO = converteParaDTO(partida);
 			removerDadosMidiaJogadaDa(partida);
 

@@ -5,7 +5,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
-import com.movie.battle.moviebattle.classes.Usuario;
+import com.movie.battle.moviebattle.classes.UsuarioAtenticacao;
 import com.movie.battle.moviebattle.security.AutenticationTokenFilter;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -25,9 +25,9 @@ public class TokenService {
 	public String gerarToken(Authentication authentication) {
 		Date data = new Date();
 		Date dataExpiracao = new Date(data.getTime() + Long.parseLong(expirecaoToken));
-		Usuario usuario = (Usuario) authentication.getPrincipal();
+		UsuarioAtenticacao usuario = (UsuarioAtenticacao) authentication.getPrincipal();
 
-		return Jwts.builder().setIssuer("jogo de filmes").setSubject(usuario.getNome().toString()).setIssuedAt(data)
+		return Jwts.builder().setIssuer("jogo de filmes").setSubject(usuario.getUsername().toString()).setIssuedAt(data)
 				.setExpiration(dataExpiracao).signWith(SignatureAlgorithm.HS256, secret).compact();
 	}
 

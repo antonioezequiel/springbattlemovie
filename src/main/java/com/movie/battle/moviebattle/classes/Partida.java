@@ -123,7 +123,7 @@ public class Partida {
 		return !this.midias.isEmpty();
 	}
 	
-	public Partida verifyAnswer(String codigoIMDB) {
+	public Partida verificarResposta(String codigoIMDB) {
 		
 		List<Midia> mediasOrder = this.midias.stream().sorted(
 									Comparator.comparing(Midia::getScore).reversed())

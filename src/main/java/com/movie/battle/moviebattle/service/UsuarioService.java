@@ -15,6 +15,7 @@ import com.movie.battle.moviebattle.DTO.UsuarioDTO;
 import com.movie.battle.moviebattle.DTO.UsuarioSemSenhaDTO;
 import com.movie.battle.moviebattle.classes.Role;
 import com.movie.battle.moviebattle.classes.Usuario;
+import com.movie.battle.moviebattle.classes.UsuarioAtenticacao;
 import com.movie.battle.moviebattle.repository.RoleRepository;
 import com.movie.battle.moviebattle.repository.UsuarioRepository;
 
@@ -42,10 +43,10 @@ public class UsuarioService implements UserDetailsService {
 	}
 
 	@Override
-	public Usuario loadUserByUsername(String nome) {
+	public UsuarioAtenticacao loadUserByUsername(String nome) {
 		Optional<Usuario> usuario = usuarioRepository.findById(nome);
 		if (usuario.isPresent()) {
-			return usuario.get();
+			return new UsuarioAtenticacao(usuario.get());
 		} else
 			throw new UsernameNotFoundException("O usuário " + nome + " não foi encontrado");
 	}
@@ -76,7 +77,7 @@ public class UsuarioService implements UserDetailsService {
 			role = new Role("ADM");
 			roleRepository.save(role);
 		}
-		usuario.setSenha(new BCryptPasswordEncoder().encode(usuario.getPassword()));
+		usuario.setSenha(new BCryptPasswordEncoder().encode(usuario.getSenha()));
 		usuario.setRoles(Arrays.asList(role));
 		try {
 			usuarioRepository.save(usuario);

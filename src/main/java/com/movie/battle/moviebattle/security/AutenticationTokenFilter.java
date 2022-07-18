@@ -12,7 +12,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.movie.battle.moviebattle.classes.Usuario;
+import com.movie.battle.moviebattle.classes.UsuarioAtenticacao;
 import com.movie.battle.moviebattle.service.TokenService;
 import com.movie.battle.moviebattle.service.UsuarioService;
 
@@ -44,7 +44,7 @@ public class AutenticationTokenFilter extends OncePerRequestFilter {
 
 	private void realizarAutenticacao(String token) {
 		String nomeUsuario = tokenService.getNomeUsuario(token);
-		Usuario usuario = usuarioService.loadUserByUsername(nomeUsuario);
+		UsuarioAtenticacao usuario = usuarioService.loadUserByUsername(nomeUsuario);
 		UsernamePasswordAuthenticationToken authentication =  new UsernamePasswordAuthenticationToken(usuario, null, usuario.getAuthorities());
 		SecurityContextHolder.getContext().setAuthentication(authentication);		
 	}

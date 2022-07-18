@@ -6,7 +6,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.jsoup.Jsoup;
@@ -14,11 +13,8 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.modelmapper.ModelMapper;
-import org.modelmapper.PropertyMap;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
-
 import com.movie.battle.moviebattle.DTO.MidiaDTO;
 import com.movie.battle.moviebattle.classes.Categoria;
 import com.movie.battle.moviebattle.classes.JsonRead;
@@ -36,23 +32,12 @@ public class MidiaService {
 
 	@Autowired
 	public MidiaService(CategoriaService categoriaService, ModelMapper modelMapper,
-			MidiaRepository midiaRepository, @Lazy PartidaService partidaService) throws IOException {
+			MidiaRepository midiaRepository, PartidaService partidaService) throws IOException {
 		super();
 		this.midiaRepository = midiaRepository;
 		this.partidaService = partidaService;
 		this.categoriaService = categoriaService;
 		this.modelMapper = modelMapper;
-		
-		/*
-		 * Mapeamento para definir apenas a descrição da categoria, como categoria no DTO
-		 */
-		PropertyMap<Midia, MidiaDTO> midiaMap = new PropertyMap<Midia, MidiaDTO>() {
-			  protected void configure() {
-			    map().setCategoria(source.getCategoria().getDescricao());
-			  }
-		};
-
-		modelMapper.addMappings(midiaMap);
 	}
 
 	public void carregarMidiasIMDB() {
