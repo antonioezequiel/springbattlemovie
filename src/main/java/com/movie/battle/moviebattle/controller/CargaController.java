@@ -19,6 +19,7 @@ import com.movie.battle.moviebattle.service.UsuarioService;
 public class CargaController {
 	private final MidiaService midiaService;
 	private final UsuarioService usuarioService;
+	/*novo comentário*/
 
 	@Autowired
 	public CargaController(MidiaService midiaService, UsuarioService usuarioService) {
