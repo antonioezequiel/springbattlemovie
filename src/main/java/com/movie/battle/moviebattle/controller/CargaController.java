@@ -1,14 +1,17 @@
 package com.movie.battle.moviebattle.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.movie.battle.moviebattle.DTO.UsuarioDTO;
 import com.movie.battle.moviebattle.DTO.UsuarioSemSenhaDTO;
+import com.movie.battle.moviebattle.exception.CadastrarUsuarioException;
 import com.movie.battle.moviebattle.service.MidiaService;
 import com.movie.battle.moviebattle.service.UsuarioService;
 
@@ -36,8 +39,8 @@ public class CargaController {
 			UsuarioSemSenhaDTO usuarioSemSenhaDTO = usuarioService
 					.criarUsuario(usuarioService.transformaParaUsuario(usuarioDTO));
 			return ResponseEntity.ok(usuarioSemSenhaDTO);
-		} catch (Exception e) {
-			return ResponseEntity.noContent().build();
+		} catch (CadastrarUsuarioException e) {
+			throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "usuário não foi cadastrado", e);
 		}
 	}
 

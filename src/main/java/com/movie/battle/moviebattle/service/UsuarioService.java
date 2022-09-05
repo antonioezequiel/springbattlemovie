@@ -16,6 +16,7 @@ import com.movie.battle.moviebattle.DTO.UsuarioSemSenhaDTO;
 import com.movie.battle.moviebattle.classes.Role;
 import com.movie.battle.moviebattle.classes.Usuario;
 import com.movie.battle.moviebattle.classes.UsuarioAtenticacao;
+import com.movie.battle.moviebattle.exception.CadastrarUsuarioException;
 import com.movie.battle.moviebattle.repository.RoleRepository;
 import com.movie.battle.moviebattle.repository.UsuarioRepository;
 
@@ -71,7 +72,7 @@ public class UsuarioService implements UserDetailsService {
 		usuarioRepository.save(usuario);
 	}
 
-	public UsuarioSemSenhaDTO criarUsuario(Usuario usuario) {
+	public UsuarioSemSenhaDTO criarUsuario(Usuario usuario) throws CadastrarUsuarioException {
 		Role role = roleRepository.getByNome("ADM");
 		if (role == null) {
 			role = new Role("ADM");
@@ -83,7 +84,7 @@ public class UsuarioService implements UserDetailsService {
 			usuarioRepository.save(usuario);
 			return transformaEmDTO(usuario);
 		} catch (Exception e) {
-			throw new RuntimeException();
+			throw new CadastrarUsuarioException();
 		}
 	}
 
