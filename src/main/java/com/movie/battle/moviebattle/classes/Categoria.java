@@ -10,7 +10,7 @@ import javax.persistence.OneToMany;
 @Entity
 public class Categoria {
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer id;
 	private String descricao;
 	@OneToMany

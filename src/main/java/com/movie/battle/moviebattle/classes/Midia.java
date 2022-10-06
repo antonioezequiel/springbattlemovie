@@ -1,5 +1,6 @@
 package com.movie.battle.moviebattle.classes;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
@@ -23,7 +24,7 @@ public class Midia {
 	
 	@JsonProperty("Title")
 	private String title;
-
+	@Column(name = "ano")
 	@JsonProperty("Year")
 	private String year;
 	 

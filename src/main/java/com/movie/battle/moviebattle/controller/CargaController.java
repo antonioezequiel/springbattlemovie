@@ -9,8 +9,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.movie.battle.moviebattle.DTO.UsuarioDTO;
 import com.movie.battle.moviebattle.DTO.UsuarioSemSenhaDTO;
+import com.movie.battle.moviebattle.enums.TipoArquivoProposta;
 import com.movie.battle.moviebattle.exception.CadastrarUsuarioException;
 import com.movie.battle.moviebattle.service.MidiaService;
 import com.movie.battle.moviebattle.service.UsuarioService;
@@ -31,6 +34,13 @@ public class CargaController {
 	@GetMapping("/carregar")
 	public String carregarDados() {
 		midiaService.carregarMidiasIMDB();
+		return "dados carregados com sucesso";
+	}
+	
+	@GetMapping("/tipos")
+	public String tipos() throws JsonProcessingException {
+		ObjectMapper objectMapper = new ObjectMapper();
+		System.out.println(objectMapper.writeValueAsString(TipoArquivoProposta.APENDICE));
 		return "dados carregados com sucesso";
 	}
 

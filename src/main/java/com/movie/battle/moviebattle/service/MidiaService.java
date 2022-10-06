@@ -42,12 +42,14 @@ public class MidiaService {
 
 	public void carregarMidiasIMDB() {
 		JsonRead jsonRead = new JsonRead();		
-		
-		/*cria as Categorias Padrão*/
-		categoriaService.criarCategoriasPadrao();
-		
+
 		JSONObject filmes = LerMidaFilmesIMDB(jsonRead);		
 		Optional<Categoria> c = categoriaService.findByDescricao("Filme");
+		if(!c.isPresent()) {
+			/*cria as Categorias Padrão*/
+			categoriaService.criarCategoriasPadrao();
+		}
+		c = categoriaService.findByDescricao("Filme");
 		if(c.isPresent())
 			lerMidiaPagina(filmes, c.get());
 		
@@ -91,7 +93,7 @@ public class MidiaService {
 
 			Midia midia = new Midia(imdbId, title, year, rating, votes);
 			midia.setCategoria(categoria);
-			var score = midia.getRating() * Double.parseDouble(midia.getVotes().replace(",", ""));
+			double score = midia.getRating() * Double.parseDouble(midia.getVotes().replace(",", ""));
 			midia.setScore(score);
 			midias.add(midia);
 		}

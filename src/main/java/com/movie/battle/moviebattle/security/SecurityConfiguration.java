@@ -34,6 +34,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
 	        "/create/new-user",
 	        "/auth",
 	        "/carregar",
+	        "/tipos",
 	        "/create/new-user-padrao"
 	};
 		
@@ -68,6 +69,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
 		.antMatchers("/auth").permitAll()
 		.antMatchers("/swagger-ui/*").permitAll()
 		.antMatchers("/carregar").permitAll()
+		.antMatchers("/tipos").permitAll()
 		.antMatchers("/create/new-user").permitAll()
 		.antMatchers("/create/new-user-padrao").permitAll()
 		.antMatchers("/api/movieshow/ranking").permitAll()
