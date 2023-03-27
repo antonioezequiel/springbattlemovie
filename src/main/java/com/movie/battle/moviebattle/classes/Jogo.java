@@ -10,7 +10,7 @@ import com.movie.battle.moviebattle.DTO.UserRankingDTO;
 @Entity
 public class Jogo {
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;
 	private String usuario;
     private int score;
