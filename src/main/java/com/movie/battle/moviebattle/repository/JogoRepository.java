@@ -11,7 +11,8 @@ import org.springframework.data.repository.query.Param;
 
 
 public interface JogoRepository extends JpaRepository<Jogo, Integer>{
-	
+
+
 	@Query(value="SELECT * FROM JOGO Order by score desc LIMIT :inicio, :quant", nativeQuery = true)
 	public List<Jogo> findAllWithPagination(@Param("inicio") int inicio,
 													@Param("quant")int quant);
